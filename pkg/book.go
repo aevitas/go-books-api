@@ -1,7 +1,7 @@
 package pkg
 
 type Book struct {
-	Id     int64   `json:"id"`
+	Id     uint64  `json:"id"`
 	ISBN   string  `json:"isbn"`
 	Title  string  `json:"title"`
 	Author string  `json:"author"`
