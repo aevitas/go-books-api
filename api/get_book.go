@@ -1,7 +1,6 @@
 package api
 
 import (
-	"errors"
 	"net/http"
 
 	"aevitas.dev/go-books/pkg"
@@ -13,18 +12,16 @@ func (s *Server) HandleGetByISBN(ctx *gin.Context) {
 
 	isbn := ctx.Param("isbn")
 
-	if len(isbn) == 0 {
-		ctx.AbortWithError(http.StatusBadRequest, errors.New("invalid isbn"))
-	}
-
 	ret := s.DB.First(&book, "isbn = ?", isbn)
+
+	if ret.RowsAffected == 0 {
+		ctx.AbortWithStatus(http.StatusNotFound)
+		return
+	}
 
 	if ret.Error != nil {
 		ctx.AbortWithError(http.StatusBadRequest, ret.Error)
-	}
-
-	if ret.RowsAffected == 0 {
-		ctx.AbortWithError(http.StatusNotFound, nil)
+		return
 	}
 
 	ctx.JSON(http.StatusOK, book)

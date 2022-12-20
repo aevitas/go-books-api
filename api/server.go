@@ -44,7 +44,7 @@ func (s *Server) Start(ep string) error {
 		return errors.New("server isn't ready - make sure to init db and gin")
 	}
 
-	if err := http.ListenAndServe(ep, nil); err != nil {
+	if err := http.ListenAndServe(ep, s.Gin.Handler()); err != nil {
 		log.Fatal(err)
 	}
 
