@@ -1,11 +1,25 @@
 package main
 
-import "aevitas.dev/go-books/api"
+import (
+	"log"
+	"os"
+
+	"aevitas.dev/go-books/api"
+	"github.com/joho/godotenv"
+)
 
 func main() {
+	err := godotenv.Load()
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	srv := &api.Server{}
 
-	srv.InitDb("host=localhost user=kiruna password=lol dbname=books")
+	dsn := os.Getenv("DB_DSN")
+
+	srv.InitDb(dsn)
 	srv.InitGin()
 
 	srv.RegisterRoutes()
